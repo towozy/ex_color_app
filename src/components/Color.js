@@ -7,17 +7,14 @@ class Color extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			color: props.color,
-		};
 	}
 
     componentWillMount() {
         this.style = { backgroundColor: "#CCC" }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-		if (this.state.color !== nextState.color) {
+    shouldComponentUpdate(nextProps) {
+		if (this.props.color !== nextProps.color) {
 			return true;
 		}
         const { rating } = this.props
@@ -40,17 +37,9 @@ class Color extends Component {
         this._title.style.color = "black"
     }
 
-    onChange = () => {
-    	console.log(this.color.value);
-    	this.setState({
-			color: this.color.value,
-		});
-    	// this.props.onEdit(this.color.value);
-	};
-
     render() {
         const { title, rating, onRemove, onRate} = this.props;
-        const color = this.state.color;
+        const color = this.props.color;
 
         return (
             <section className="color" style={this.style}>
@@ -62,9 +51,8 @@ class Color extends Component {
 					<input
 						className="color"
 						style={{display: "block", width: "100%", height: "100%", opacity: 0}}
-						ref={input => this.color = input}
 						type="color"
-						onChange={this.onChange}
+						onChange={e => this.props.onEdit(e.target.value)}
 					/>
                 </div>
                 <div>
@@ -79,6 +67,7 @@ class Color extends Component {
 Color.propTypes = {
     title: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     rating: PropTypes.number,
     onRemove: PropTypes.func,
     onRate: PropTypes.func
